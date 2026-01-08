@@ -1,3 +1,8 @@
 #!/bin/bash
 set -e
-apache2-foreground
+
+# Remover locks antigos
+rm -f /var/run/apache2/apache2.pid
+
+# Iniciar Apache em foreground
+exec apache2-foreground
