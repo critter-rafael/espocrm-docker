@@ -1,10 +1,14 @@
 FROM espocrm/espocrm:latest
 
-# Desabilitar MPMs conflitantes
+# Remover configurações de MPM conflitantes
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.load
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.conf
+
+# Desabilitar todos os MPMs
 RUN a2dismod mpm_prefork mpm_worker mpm_event 2>/dev/null || true
 
-# Habilitar apenas o MPM event
-RUN a2enmod mpm_event
+# Habilitar apenas o MPM prefork (mais estável)
+RUN a2enmod mpm_prefork
 
 # Copiar arquivo de inicialização
 COPY start.sh /usr/local/bin/start.sh
